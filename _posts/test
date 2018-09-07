@@ -1,0 +1,49 @@
+---
+layout:     post
+title:      2018-09-04-旋转数组
+subtitle:   LeetCode刷题记录
+date:       2018-09-04
+author:     BY kylin
+header-img: img/post-bg-cook.jpg
+catalog: true
+tags:
+    - LeetCode c++
+---
+
+### 题目
+[旋转数组](https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/23/)
+
+给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+
+说明:
+
+* 尽可能想出更多的解决方案，至少有三种不同的方法可以解决这个问题。
+* 要求使用空间复杂度为 O(1) 的原地算法。
+
+### 思路
+长为s的数组，向右挪动k次，即将前l-k个元素放到最后。
+
+### 代码
+```
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int l=nums.size()-k%nums.size();
+        vector<int>::iterator it=nums.begin();
+        for(int i=0;i<l;i++)
+        {
+            it=nums.begin();
+            nums.push_back(*it);
+            it=nums.begin();
+            nums.erase(it);
+        }
+    }
+};
+```
+
+### 坑
+* vector push back后，迭代器的指针会失效。原因是vector长度增加，重新开辟了一整块内存。
+* vector 删除后，删除位置后的迭代器和.end()会失效。
+* 存在测试用例k>s，k需要取模。
+
+ 
