@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      视觉SLAM十四讲 -- 第二讲笔记
+title:      视觉SLAM十四讲-第二讲笔记
 subtitle:   SLAM学习笔记
 date:       2018-09-06
 author:     BY kylin
