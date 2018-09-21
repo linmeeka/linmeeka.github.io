@@ -11,89 +11,91 @@ tags:
     - 算法
     - 字符串
 ---
-实现strStr()--KMP
+# 实现strStr()--KMP
 
-题目
+## 题目
 
-实现 strStr() 函数。
+实现 [strStr()](https://baike.baidu.com/item/strstr/811469) 函数。
 
-给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  **-1**。
 
 
 
-思路
+## 思路
 
 暴力可解，用KMP的话是一道模板题。
 
-从大二开始看KMP，理解一次忘一次。又重新理解了一遍，手敲了一遍代码，写下来自己的理解，希望能记住吧。(:з)∠)
+从大二开始看KMP，理解一次忘一次。又重新理解了一遍，手敲了一遍代码，写下来自己的理解，希望能记住吧。_(:з)∠)_
 
 
 
-代码
+## 代码
 
-    class Solution {
-    public:
-        void getNext(vector<int> &next,const string needle)
+```
+class Solution {
+public:
+    void getNext(vector<int> &next,const string needle)
+    {
+        int lp=next.size();
+        int k=-1;
+        int j=0;
+        next[0]=-1;
+        while(j<lp-1)
         {
-            int lp=next.size();
-            int k=-1;
-            int j=0;
-            next[0]=-1;
-            while(j<lp-1)
+            if(k==-1||needle[j]==needle[k])
             {
-                if(k==-1||needle[j]==needle[k])
+                if(needle[++j]==needle[++k])
                 {
-                    if(needle[++j]==needle[++k])
-                    {
-                        next[j]=next[k];
-                    }
-                    else
-                    {
-                        next[j]=k;
-                    }
+                    next[j]=next[k];
                 }
                 else
                 {
-                    k=next[k];
+                    next[j]=k;
                 }
             }
-        }
-        int strStr(string haystack, string needle) {
-            int ls=haystack.length();
-            int lp=needle.length();
-            if(lp==0)
-                return 0;
-            int i=0;
-            int j=0;
-            vector<int> next(lp,0);
-            getNext(next,needle);
-            while(i<ls && j<lp)
-            {
-                if(j==-1 || haystack[i]==needle[j])
-                {
-                    i++;
-                    j++;
-                }
-                else
-                {
-                    j=next[j];
-                }
-            }
-            
-            if(j>=lp)
-                return i-lp;
             else
-                return -1;
+            {
+                k=next[k];
+            }
         }
-    };
+    }
+    int strStr(string haystack, string needle) {
+        int ls=haystack.length();
+        int lp=needle.length();
+        if(lp==0)
+            return 0;
+        int i=0;
+        int j=0;
+        vector<int> next(lp,0);
+        getNext(next,needle);
+        while(i<ls && j<lp)
+        {
+            if(j==-1 || haystack[i]==needle[j])
+            {
+                i++;
+                j++;
+            }
+            else
+            {
+                j=next[j];
+            }
+        }
+        
+        if(j>=lp)
+            return i-lp;
+        else
+            return -1;
+    }
+};
+```
 
 
 
-KMP
+## KMP
 
-暴力匹配的规律
+### 暴力匹配的规律
 
-
+![1537512813173](C:\Users\QiZhang\AppData\Local\Temp\1537512813173.png)
 
 如图，S为待匹配串，P为模式串，i,j分别指向S,P当前的位置。
 
@@ -104,13 +106,13 @@ KMP
 1. 下次可以匹配到的位置是i。
 2. 下次可以匹配到的位置在i前，设它为i-k。
 
- 
+![img](https://images0.cnblogs.com/blog/416010/201308/17083659-e6718026bf4f48a0be2d5d6076be4c55.png) 
 
  
 
 
 
-
+![img](https://images0.cnblogs.com/blog/416010/201308/17083828-cdb207f5460f4645982171e58571a741.png)
 
 
 
@@ -120,11 +122,11 @@ KMP
 
 其中，情况1如上图，意味着，s串中，[i-j,i-1]的部分，都无法与p串匹配。如图，此时我们可以直接把i不动，j移动到0。因为我们已经知道，p串的前三个字符是匹配的，而在p[0,j]部分中，只有p[0]是能与s[i]匹配到的'A'字符。换言之，因为匹配过前面三个字符，我们可以得到的信息是：
 
-
+![img](https://images0.cnblogs.com/blog/416010/201308/17084030-82e4b71b85a440c5a636d57503931415.png)
 
  
 
-
+![img](https://images0.cnblogs.com/blog/416010/201308/17084037-cc3c34200809414e9421c316ceba2cda.png)
 
 
 
@@ -140,26 +142,27 @@ KMP
 
 设P中存在一个指针k，使得：
 
-- p[0,k-1]=p[j-k,j-1]
+* p[0,k-1]=p[j-k,j-1]
 
 当s[i]!=p[j]时，我们已知如下结论:
 
 - s[i-j,i-1]=j[0,j-1]
 
-- s[i-k,i-1]=p[j-k,j-1]
+* s[i-k,i-1]=p[j-k,j-1]
 
 可以得到：
 
-- p[0,k-1]=s[i-k,i-1]
+* p[0,k-1]=s[i-k,i-1]
+
   
 
 这意味着，S中i指针往前的k个字符，和P中的开头k个字符，是完全匹配的！再次匹配的时候，就可以固定i指针不动，P串则直接从k位置开始匹配。
 
-我们使用一个next数组来表示它，即：next[j]=k表示，当P[j] != S[i]时，j指针的下一步移动位置。 也就是说，P串的前几个字符，能够和S串i位置之前匹配上。
+**我们使用一个next数组来表示它，即：next[j]=k表示，当P[j] != S[i]时，j指针的下一步移动位置。 也就是说，P串的前几个字符，能够和S串i位置之前匹配上。**
 
 
 
-如何计算next数组 
+###如何计算next数组 
 
 我们要找的是，P串中j位置，和从头往后数到第几个字符的字串能够完全匹配上。让我们分三部分解读代码:
 
@@ -175,17 +178,11 @@ KMP
 
 此外，多判断了p[++j]是否等于p[++k]。
 
- 
+![img](https://images0.cnblogs.com/blog/416010/201308/17084726-790fc1b2c48c411b8011eab9de692f6d.png) 
 
 如图所示，若j是从串最后移动到当前=1的位置，即移动前：j=3,k=1，可以发现，p[1]==p[3]，而由于j=3时已经判断过不匹配，那么移动到1的位置也没有意义，可以再向前跳一步。
 
-1. 不匹配部分
+3. 不匹配部分
+
    寻找next数组可以看作：[0,k]的字串和[j-k,j]的字串是否匹配。而当p[++j]不于p[++k]时，问题转做[0,k]中有没有字串和[j-k,j]能匹配上，k=next[k]将k挪到k匹配到的更小字串的位置，这个操作可以看作k指针向前“跳跃”，不断寻找能够匹配的更短字串，直到找到的过程。
-
-
-
- 
-
- 
-
 
